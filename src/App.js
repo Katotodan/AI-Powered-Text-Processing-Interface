@@ -49,8 +49,7 @@ function App() {
         throw new Error("Language Detector not supported")
       }
     } catch (error) {
-      console.log(error.message);
-      
+      console.log(error);
     }
     
 
@@ -78,7 +77,7 @@ function App() {
   return (
     <div className="App">
       <h2>Welcome to Text Processing App</h2>
-      <OutputText text={inputText}></OutputText>
+      <OutputText text={inputText} languageDetectorModel={languageDetectorModel}></OutputText>
       <TranslatedText textToBeTranslated={textToBeTranslated} inputLanguage ="" outputLanguage =""/>
       <InputText updateText={updateText}></InputText>
       
