@@ -1,0 +1,27 @@
+.textarea-container{
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    background-color: white;
+    width: 100%;
+    justify-content: center;
+    gap: 3%;
+    height: auto;
+    padding: 0.25rem 0;
+    align-items: flex-end;
+}
+.textarea-container textarea{
+    width: 80%;
+    min-height: 24px;
+    max-height: 120px;
+    border-radius: 5px;
+    overflow-y: auto;
+    padding: 0.2rem;
+    
+}
+.textarea-container button{
+    width: 15%;
+    padding: 0.2rem;
+}

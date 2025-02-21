@@ -1,0 +1,53 @@
+.initial-p{
+    text-align: center;
+    font-size: 1.3rem;
+    margin-top: 1rem;
+}
+.text-container{
+    margin: 0 0.5rem 1rem 0.5rem;
+    float: right;
+    width: auto;
+    
+}
+.arrow-container{
+    display: flex;
+    justify-content: end;
+    gap: 1rem;
+}
+.inputText-container, .translatedText-container{
+    min-width: auto;
+    max-width: 100%;
+    background-color: bisque;
+    padding: 0.25rem;
+    margin: 0.25rem 0;
+    min-height: auto;
+    max-height: 10rem;
+    overflow-y: scroll;
+}
+.language-container{
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+}
+.Summarizer, .translate{
+    padding: 0.5rem 1rem;
+    background-color: rgb(130, 130, 185);
+    border: none;
+    border-radius: 5px;
+}
+.translate{
+    margin: 0.5rem 0;
+}
+select{
+    display: inline-block;
+    margin: 0 0.25rem;
+}
+.translatedText-container{
+    width: 100%;
+    background-color: inherit;
+    min-height: auto;
+    max-height: 13rem;
+    overflow-y: scroll;
+}
+
+/* The text container should scroll vertically and contuni with the style */
