@@ -1,9 +1,10 @@
-import React, {useRef, useEffect} from 'react'
+import React, {useRef, useEffect, useState} from 'react'
 import SendIcon from '@mui/icons-material/Send';
 import "./inputText.css"
 
-export const InputText = () => {
+export const InputText = ({updateText}) => {
     const textareaRef = useRef(null)
+    const [textareaValue, setTextareaValue] = useState("")
 
     const calculateLineHeight = (element) => {
         // Create a single-line div to measure
@@ -26,6 +27,7 @@ export const InputText = () => {
         const textarea = textareaRef.current;
         if(!textarea) return;
 
+        setTextareaValue(textarea.value)
         // Reset height to auto to get the correct scroll height
         textarea.style.height = 'auto'
         // Calculate line height from computed styles
@@ -38,18 +40,24 @@ export const InputText = () => {
         
     }
     useEffect(() => {
-        // Set initial height
-        adjustHeight();
-      }, []);
+      // Set initial height
+      adjustHeight()
+    }, []);
+    const handleSubmit = () =>{
+      updateText(textareaValue)
+      setTextareaValue("")
+      textareaRef.current.value = ""
+      adjustHeight()
+    }
 
   return (
     <div className="textarea-container">
         <textarea 
             ref={textareaRef}
-            onChange={adjustHeight}>
-
-        </textarea>
-        <button>
+            value={textareaValue}
+            onChange={adjustHeight}
+          />
+        <button onClick={handleSubmit}>
             <SendIcon></SendIcon>
         </button>
         

@@ -1,23 +1,65 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import "./outputText.css"
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const OutputText = ({text}) => {
+    const [allTextArray, setAllTextArray] = useState([text])
+    const [textArrayIndex, setTextArrayIndex] = useState(0)
+    const [hideSummarizeBtn, setHideSummarizeBtn]  = useState(false)  
+    const previousBtnRef = useRef(null) 
+    const summarizeBtnRef = useRef(null)
+
+    useEffect(()=>{
+        setHideSummarizeBtn(false)
+        setAllTextArray([text])
+        setTextArrayIndex(0)
+        
+    }, [text])
+    const summarize = () =>{
+        setAllTextArray([...allTextArray, text])
+        setHideSummarizeBtn(true)
+        setTextArrayIndex(1)
+    }
+    const showSummarizedText = ()=>{
+        setTextArrayIndex(1)
+        summarizeBtnRef.current.disabled = true;
+        previousBtnRef.current.disabled = false;
+    }
+    const showPreviousText = ()=>{
+        setTextArrayIndex(0)
+        summarizeBtnRef.current.disabled = false;
+        previousBtnRef.current.disabled = true;
+    }
+    // Working on the slide
+    
   return (
     <div>
       {text ? (
         <div className='text-container'>
             <div className="arrow-container">
-                <ArrowBackIosNewIcon></ArrowBackIosNewIcon>
-                <ArrowForwardIosIcon></ArrowForwardIosIcon>
+                {hideSummarizeBtn && (<>
+                    <button 
+                        title="Previous text" 
+                        onClick={showPreviousText}
+                        ref={previousBtnRef}
+                    ><ArrowBackIosNewIcon /></button>
+                    <button 
+                        title="Summarized text"
+                        onClick={showSummarizedText}
+                        ref={summarizeBtnRef}
+                    ><ArrowForwardIosIcon /></button>
+                </>)}
+                
             </div>
             <div className='inputText-container'>
-                {text}
+                {allTextArray[textArrayIndex]}
             </div>
             <div className='language-container'>
                 <p>Detected language: <strong>Francais</strong></p>
-                {text.length > 150 && <button className='Summarizer'>Summarizer</button>}
+                {!hideSummarizeBtn && (<>
+                {text.length > 150 && <button className='Summarizer' onClick={summarize}>Summarizer</button>}
+                </>)}
             </div>
             <form action="">
             <label htmlFor="select">Select a language to translate into</label>
@@ -33,10 +75,6 @@ const OutputText = ({text}) => {
             <button className='translate'>Translate</button>
 
             </form>
-            
-            <div className='translatedText-container'>
-                {text}
-            </div>
         </div>
         ) : (
             <div>

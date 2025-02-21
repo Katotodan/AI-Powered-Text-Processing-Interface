@@ -14,7 +14,7 @@
     justify-content: end;
     gap: 1rem;
 }
-.inputText-container, .translatedText-container{
+.inputText-container{
     min-width: auto;
     max-width: 100%;
     background-color: bisque;
@@ -42,12 +42,6 @@ select{
     display: inline-block;
     margin: 0 0.25rem;
 }
-.translatedText-container{
-    width: 100%;
-    background-color: inherit;
-    min-height: auto;
-    max-height: 13rem;
-    overflow-y: scroll;
-}
+
 
 /* The text container should scroll vertically and contuni with the style */
