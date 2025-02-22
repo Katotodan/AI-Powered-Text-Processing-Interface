@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import "./outputText.css"
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { DetectedLanguage } from '../DetectedLanguage/DetectedLanguage';
 
-const OutputText = ({text, detectedLanguage}) => {
+const OutputText = ({text}) => {
     const [allTextArray, setAllTextArray] = useState([text])
     const [textArrayIndex, setTextArrayIndex] = useState(0)
     const [hideSummarizeBtn, setHideSummarizeBtn]  = useState(false)  
@@ -57,7 +58,7 @@ const OutputText = ({text, detectedLanguage}) => {
                 {allTextArray[textArrayIndex]}
             </div>
             <div className='language-container'>
-                <p>Detected language: <strong>{detectedLanguage}</strong></p>
+                <DetectedLanguage text={text}/>
                 {!hideSummarizeBtn && (<>
                 {text.length > 150 && <button className='Summarizer' onClick={summarize}>Summarizer</button>}
                 </>)}
