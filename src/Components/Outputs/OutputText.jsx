@@ -25,6 +25,8 @@ const OutputText = ({text}) => {
             if ('ai' in window && 'summarizer' in window.ai) {
                 // The Summarizer API is supported.
                 const available = (await window.ai.summarizer.capabilities()).available;
+                console.log(available);
+                
                 if (available === 'no') {
                     // The Summarizer API isn't usable.
                     throw new Error("Text summarizer not supported")
