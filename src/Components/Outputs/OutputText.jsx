@@ -10,6 +10,7 @@ const OutputText = ({text}) => {
     const [hideSummarizeBtn, setHideSummarizeBtn]  = useState(false)  
     const previousBtnRef = useRef(null) 
     const summarizeBtnRef = useRef(null)
+    let summarizeModel;
 
     
     useEffect(()=>{
@@ -18,8 +19,40 @@ const OutputText = ({text}) => {
         setTextArrayIndex(0)
         
     }, [text])
-    const summarize = () =>{
-        setAllTextArray([...allTextArray, text])
+
+    const initializeSummarizedModel = async() =>{
+        try {
+            if ('ai' in window && 'summarizer' in window.ai) {
+                // The Summarizer API is supported.
+                const available = (await window.ai.summarizer.capabilities()).available;
+                if (available === 'no') {
+                    // The Summarizer API isn't usable.
+                    throw new Error("Text summarizer not supported")
+                  }
+                  if (available === 'readily') {
+                    // The Summarizer API can be used immediately .
+                    summarizeModel = await window.ai.summarizer.create();
+                  } else {
+                    // The Summarizer API can be used after the model is downloaded.
+                    summarizeModel = await window.ai.summarizer.create();
+                    summarizeModel.addEventListener('downloadprogress', (e) => {
+                      console.log(e.loaded, e.total);
+                    });
+                    await summarizeModel.ready;
+                  }
+            }else{
+                throw new Error("Text summarizer not supported")
+            }
+            
+        } catch (error) {
+            
+        }
+        
+    }
+    const summarize = async () =>{
+        await initializeSummarizedModel()
+        const summary = await summarizeModel.summarize(text)
+        setAllTextArray([...allTextArray, summary])
         setHideSummarizeBtn(true)
         setTextArrayIndex(1)
     }
