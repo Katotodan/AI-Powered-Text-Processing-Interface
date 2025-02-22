@@ -22,7 +22,8 @@
     margin: 0.25rem 0;
     min-height: auto;
     max-height: 10rem;
-    overflow-y: scroll;
+    overflow-y: auto;
+    border-radius: 5px;
 }
 .language-container{
     display: flex;
@@ -41,6 +42,15 @@
 select{
     display: inline-block;
     margin: 0 0.25rem;
+}
+.error-msg{
+    text-align: center;
+    color: red;
+}
+.error-msg span{
+    display: inline-block;
+    padding: 0 0.25rem;
+    cursor: pointer;
 }
 
 

@@ -3,6 +3,7 @@ import "./outputText.css"
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { DetectedLanguage } from '../DetectedLanguage/DetectedLanguage';
+import { TranslateSelect } from '../TranslateSection/TranslateSelect';
 
 const OutputText = ({text}) => {
     const [allTextArray, setAllTextArray] = useState([text])
@@ -10,26 +11,26 @@ const OutputText = ({text}) => {
     const [hideSummarizeBtn, setHideSummarizeBtn]  = useState(false)  
     const previousBtnRef = useRef(null) 
     const summarizeBtnRef = useRef(null)
+    const [detectedLanguageCode, setDetectedLanguageCode] = useState("")
+    const [isSummarizerWorking, setIsSummarizerWorking] = useState(true)
     let summarizeModel;
+
 
     
     useEffect(()=>{
         setHideSummarizeBtn(false)
         setAllTextArray([text])
         setTextArrayIndex(0)
-        
+        setIsSummarizerWorking(true)
     }, [text])
 
     const initializeSummarizedModel = async() =>{
-        try {
-            if (window.ai && window.ai.summarizer) {
-                console.log("Summarizer capabilities:", window.ai.summarizer);
-                // Check what specific capabilities are available
-            }
+        try {            
             if ('ai' in window && 'summarizer' in window.ai) {
                 // The Summarizer API is supported.
-                const available = (await window.ai.summarizer.capabilities());                
+                const available = (await window.ai.summarizer.capabilities()).available;                
                 console.log(available);
+                
                 
                 if (available === 'no') {
                     // The Summarizer API isn't usable.
@@ -61,11 +62,22 @@ const OutputText = ({text}) => {
         
     }
     const summarize = async () =>{
-        const summary = await initializeSummarizedModel()
+        try {
+            const summary = await initializeSummarizedModel()
+            if(summary){
+                setAllTextArray([...allTextArray, summary])
+                setHideSummarizeBtn(true)
+                setTextArrayIndex(1)
+            }else{
+                setIsSummarizerWorking(false)
+            }
         
-        setAllTextArray([...allTextArray, summary])
-        setHideSummarizeBtn(true)
-        setTextArrayIndex(1)
+            
+        } catch (error) {
+            console.log("No summary");
+            
+        }
+        
     }
     const showSummarizedText = ()=>{
         setTextArrayIndex(1)
@@ -77,12 +89,17 @@ const OutputText = ({text}) => {
         summarizeBtnRef.current.disabled = false;
         previousBtnRef.current.disabled = true;
     }
-    // Working on the slide
+    const newLanguage = (e) =>{
+        setDetectedLanguageCode(e)
+    }
     
   return (
     <div>
       {text ? (
         <div className='text-container'>
+            {!isSummarizerWorking && <p className='error-msg'>
+                Summarizer not workink <span onClick={()=>{setIsSummarizerWorking(true)}}>X</span>
+            </p> }
             <div className="arrow-container">
                 {hideSummarizeBtn && (<>
                     <button 
@@ -102,25 +119,16 @@ const OutputText = ({text}) => {
                 {allTextArray[textArrayIndex]}
             </div>
             <div className='language-container'>
-                <DetectedLanguage text={text}/>
+                <DetectedLanguage text={text} language ={newLanguage}/>
                 {!hideSummarizeBtn && (<>
-                {text.length > 150 && <button className='Summarizer' onClick={summarize}>Summarizer</button>}
+                    {text.length > 150 && (<>{detectedLanguageCode === "en" && <button className='Summarizer' onClick={summarize}>Summarizer</button>}</>)}
                 </>)}
             </div>
-            <form action="">
-            <label htmlFor="select">Select a language to translate into</label>
-            <select name="" id="select" required>
-                <option value=""></option>
-                <option value="en">English</option>
-                <option value="pt">Portuguese</option>
-                <option value="es">Spanish</option>
-                <option value="ru">Russian</option>
-                <option value="tr">Turkish</option>
-                <option value="fr">French</option>
-            </select>
-            <button className='translate'>Translate</button>
-
-            </form>
+            {/* Translate code */}
+            <TranslateSelect 
+            text={allTextArray[textArrayIndex]}
+            currentLanguage = {detectedLanguageCode}
+            />
         </div>
         ) : (
             <div>

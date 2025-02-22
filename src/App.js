@@ -3,10 +3,11 @@ import './App.css';
 import { InputText } from './Components/Inputs/InputText';
 import OutputText from './Components/Outputs/OutputText';
 import { TranslatedText } from './Components/TranslatedText/TranslatedText';
+import eventBus from './eventBus';
 
 function App() {
   const [inputText, setInputText] = useState("")
-  const [textToBeTranslated, setTextToBeTranslated] = useState("")
+  const [languageNotFound, setLanguageNotFound] = useState(false)
   
 
   useEffect(()=>{
@@ -21,15 +22,30 @@ function App() {
     document.head.append(otMeta2);
   }, [])
 
+  useEffect(()=>{
+    const onDectetingLanguageFailure = (err) =>{
+      setLanguageNotFound(true)
+    }
+    eventBus.on("langugeDetectorError", onDectetingLanguageFailure)
+
+    return ()=>{
+      eventBus.off("langugeDetectorError", onDectetingLanguageFailure)
+    }
+  }, [])
+
+
+
   const updateText =async (e)=>{
     setInputText(e)
+    setLanguageNotFound(false)
   }
   
   return (
     <div className="App">
       <h2>Welcome to Text Processing App</h2>
       <OutputText text={inputText}></OutputText>
-      <TranslatedText textToBeTranslated={textToBeTranslated} inputLanguage ="" outputLanguage =""/>
+      <TranslatedText newText={inputText}/>
+      {languageNotFound && <p>Input language not detected</p>}
       <InputText updateText={updateText}></InputText>
       
     </div>

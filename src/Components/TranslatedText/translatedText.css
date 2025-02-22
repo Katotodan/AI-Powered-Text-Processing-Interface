@@ -1,8 +1,15 @@
-.translatedText-container{
+.translatedText{
     width: 100%;
     padding: 0.25rem;
     margin: 0.25rem 0;
     min-height: auto;
     max-height: 13rem;
-    overflow-y: scroll;
+    overflow-y: auto;
+    border-radius: 5px;
+}
+.error-msg{
+    color: red;
+}
+.loading-msg{
+    text-align: center;
 }

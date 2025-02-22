@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
+import eventBus from '../../eventBus';
 
-export const DetectedLanguage = ({text}) => {
+export const DetectedLanguage = ({text, language}) => {
     const [languageDetected, setLanguageDetected] = useState("")
     let detector;
 
@@ -32,7 +33,9 @@ export const DetectedLanguage = ({text}) => {
             throw new Error("Language Detector not supported")
           }
         } catch (error) {
-          console.log(error);
+          console.log(error.message);
+          
+          eventBus.emit("langugeDetectorError", {message: error.message})
         }
     }
 
@@ -43,41 +46,50 @@ export const DetectedLanguage = ({text}) => {
             "prob": 0
         }
         const languageMap = {
-            en: "English",
-            es: "Spanish",
-            fr: "French",
-            de: "German",
-            it: "Italian",
-            zh: "Chinese",
-            ja: "Japanese",
-            ar: "Arabic",
-            ru: "Russian",
-            hi: "Hindi",
-            pt: "Portuguese",
-            tr: "Turkish"
-          };
-          for (const result of results) {
-              if(result.confidence > highProbability.prob){
-                  highProbability.lang = result.detectedLanguage
-                  highProbability.prob = result.confidence
-              }
-          }
-          console.log(highProbability.lang, "Language");
-          
-          return(languageMap[highProbability.lang])
-      
+          en: "English",
+          es: "Spanish",
+          fr: "French",
+          de: "German",
+          it: "Italian",
+          zh: "Chinese",
+          ja: "Japanese",
+          ar: "Arabic",
+          ru: "Russian",
+          hi: "Hindi",
+          pt: "Portuguese",
+          tr: "Turkish"
+        };
+        for (const result of results) {
+            if(result.confidence > highProbability.prob){
+                highProbability.lang = result.detectedLanguage
+                highProbability.prob = result.confidence
+            }
+        }
+        
+        language(highProbability.lang)          
+        return(languageMap[highProbability.lang])          
     }
 
     useEffect(()=>{
         const updateLanguage = async() =>{
+          try {
             await initializedLanguageDetector()
             setLanguageDetected(await getDetectedLanguage(text))
+            
+          } catch (error) {
+            console.log(error.message);
+          
+            eventBus.emit("langugeDetectorError", {message: error.message})
+          
+          }
+            
         }
         updateLanguage()
         
     }, [text])
       
   return (
-      <p>Detected language: <strong>{languageDetected}</strong></p>
+      <p>Detected language: <strong>
+        {languageDetected ? languageDetected : "None"}</strong></p>
   )
 }
