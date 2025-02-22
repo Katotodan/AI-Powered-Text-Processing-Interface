@@ -12,7 +12,7 @@ function App() {
   useEffect(()=>{
     const otMeta = document.createElement('meta');
     otMeta.httpEquiv = 'origin-trial';
-    otMeta.content = process.env.REACT_APP_SAMARIZER_TOKKEN;
+    otMeta.content = process.env.REACT_APP_SAMARIZER_TOKEN;
     document.head.append(otMeta);
     // Adding the translator origin trial tokken
     const otMeta2 = document.createElement('meta');

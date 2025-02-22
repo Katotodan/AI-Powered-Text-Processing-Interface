@@ -22,9 +22,13 @@ const OutputText = ({text}) => {
 
     const initializeSummarizedModel = async() =>{
         try {
+            if (window.ai && window.ai.summarizer) {
+                console.log("Summarizer capabilities:", window.ai.summarizer);
+                // Check what specific capabilities are available
+            }
             if ('ai' in window && 'summarizer' in window.ai) {
                 // The Summarizer API is supported.
-                const available = (await window.ai.summarizer.capabilities()).available;
+                const available = (await window.ai.summarizer.capabilities());                
                 console.log(available);
                 
                 if (available === 'no') {
