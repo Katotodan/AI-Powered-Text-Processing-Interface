@@ -40,18 +40,23 @@ const OutputText = ({text}) => {
                     });
                     await summarizeModel.ready;
                   }
+                  console.log("Initialization done");
+                  const summary = await summarizeModel.summarize(text)
+                  return summary
+                  
             }else{
                 throw new Error("Text summarizer not supported")
             }
             
         } catch (error) {
+            console.log(error);
             
         }
         
     }
     const summarize = async () =>{
-        await initializeSummarizedModel()
-        const summary = await summarizeModel.summarize(text)
+        const summary = await initializeSummarizedModel()
+        
         setAllTextArray([...allTextArray, summary])
         setHideSummarizeBtn(true)
         setTextArrayIndex(1)
