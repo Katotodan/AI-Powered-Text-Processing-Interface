@@ -22,41 +22,37 @@ function App() {
     document.head.append(otMeta2);
   }, [])
 
-  useEffect(()=>{
-    const initializedLanguageDetector = async()=>{
-      try {
-        if ('ai' in window && 'languageDetector' in window.ai){ 
-          // The Language Detector API is available.
-          const languageDetectorCapabilities = await window.ai.languageDetector.capabilities();
-          const canDetect = languageDetectorCapabilities.capabilities;
-          if (canDetect === 'no') {
-            // The language detector isn't usable.
-            throw new Error("Language Detector not supported")
-          }else if(canDetect === 'readily'){
-            //The language detector can immediately be used.
-            detector = await window.ai.languageDetector.create()
-          } else {
-            //The language detector can be used after model download.
-            detector = await window.ai.languageDetector.create({
-              monitor(m) {
-                m.addEventListener('downloadprogress', (e) => {
-                  console.log(`Downloaded ${e.loaded} of ${e.total} bytes.`);
-                });
-              },
-            })
-            await detector.ready;
-          }
-  
-        }else{
+  const initializedLanguageDetector = async()=>{
+    try {
+      if ('ai' in window && 'languageDetector' in window.ai){ 
+        // The Language Detector API is available.
+        const languageDetectorCapabilities = await window.ai.languageDetector.capabilities();
+        const canDetect = languageDetectorCapabilities.capabilities;
+        if (canDetect === 'no') {
+          // The language detector isn't usable.
           throw new Error("Language Detector not supported")
+        }else if(canDetect === 'readily'){
+          //The language detector can immediately be used.
+          detector = await window.ai.languageDetector.create()
+        } else {
+          //The language detector can be used after model download.
+          detector = await window.ai.languageDetector.create({
+            monitor(m) {
+              m.addEventListener('downloadprogress', (e) => {
+                console.log(`Downloaded ${e.loaded} of ${e.total} bytes.`);
+              });
+            },
+          })
+          await detector.ready;
         }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    initializedLanguageDetector()
 
-  }, [])
+      }else{
+        throw new Error("Language Detector not supported")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const getDetectedLanguage = async (text)=>{
     const results = await detector.detect(text);
@@ -94,6 +90,7 @@ function App() {
 
   const updateText =async (e)=>{
     setInputText(e)
+    await initializedLanguageDetector()
     setLanguageDetected(await getDetectedLanguage(e))
   }
 
