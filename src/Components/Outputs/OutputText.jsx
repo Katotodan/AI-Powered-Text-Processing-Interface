@@ -3,50 +3,19 @@ import "./outputText.css"
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-const OutputText = ({text, languageDetectorModel}) => {
+const OutputText = ({text, detectedLanguage}) => {
     const [allTextArray, setAllTextArray] = useState([text])
     const [textArrayIndex, setTextArrayIndex] = useState(0)
     const [hideSummarizeBtn, setHideSummarizeBtn]  = useState(false)  
     const previousBtnRef = useRef(null) 
     const summarizeBtnRef = useRef(null)
-    const [detectedLanguage, setDetectedLanguage] = useState("")
 
-    const getDetectedLanguage = async (text)=>{
-        const results = await languageDetectorModel.detect(text);
-        let highProbability = {
-            "lang": "",
-            "prob": 0
-        }
-        const languageMap = {
-            en: "English",
-            es: "Spanish",
-            fr: "French",
-            de: "German",
-            it: "Italian",
-            zh: "Chinese",
-            ja: "Japanese",
-            ar: "Arabic",
-            ru: "Russian",
-            hi: "Hindi",
-            pt: "Portuguese",
-            tr: "Turkish"
-          };
-        for (const result of results) {
-            if(result.confidence > highProbability.prob){
-                highProbability.lang = result.detectedLanguage
-                highProbability.prob = result.confidence
-            }
-        }
-        return(languageMap[highProbability.lang])
-
-    }
-    useEffect(async()=>{
+    
+    useEffect(()=>{
         setHideSummarizeBtn(false)
         setAllTextArray([text])
         setTextArrayIndex(0)
-        if(text){
-            setDetectedLanguage(getDetectedLanguage(text))
-        }
+        
     }, [text])
     const summarize = () =>{
         setAllTextArray([...allTextArray, text])
@@ -88,7 +57,7 @@ const OutputText = ({text, languageDetectorModel}) => {
                 {allTextArray[textArrayIndex]}
             </div>
             <div className='language-container'>
-                <p>Detected language: <strong>Francais</strong></p>
+                <p>Detected language: <strong>{detectedLanguage}</strong></p>
                 {!hideSummarizeBtn && (<>
                 {text.length > 150 && <button className='Summarizer' onClick={summarize}>Summarizer</button>}
                 </>)}
