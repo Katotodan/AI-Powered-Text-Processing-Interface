@@ -43,8 +43,10 @@ export const TranslatedText = ({newText}) => {
 
   return (
     <div className='translatedText'>
-      {isLoading ? <p className='loading-msg'>Translating ...</p>: <>{translatedText}</> }
-      {errorExist && <p className='error-msg'>{errorMsg}</p>}
+      {isLoading ? <p 
+      className='loading-msg' aria-label='Translation has started'>
+        Translating ...</p>: <p aria-label={translatedText}>{translatedText}</p> }
+      {errorExist && <p className='error-msg' aria-label={errorMsg}>{errorMsg}</p>}
     </div>
   )
 }

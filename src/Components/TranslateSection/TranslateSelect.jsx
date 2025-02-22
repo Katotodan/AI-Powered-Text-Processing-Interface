@@ -47,17 +47,17 @@ export const TranslateSelect = ({text, currentLanguage}) => {
     }
   return (
     <form onSubmit={translate}>
-        <label htmlFor="select">Select a language to translate into</label>
-        <select name="" id="select" required value={selectedOption} onChange={handleChange}>
-            <option value=""></option>
-            <option value="en">English</option>
-            <option value="pt">Portuguese</option>
-            <option value="es">Spanish</option>
-            <option value="ru">Russian</option>
-            <option value="tr">Turkish</option>
-            <option value="fr">French</option>
+        <label htmlFor="select" aria-label='Select a language to translate into'>Select a language to translate into</label>
+        <select name="" id="select" required value={selectedOption} onChange={handleChange} role='Select'>
+            <option value="" ></option>
+            <option value="en" aria-label='English'>English</option>
+            <option value="pt" aria-label='Portuguese'>Portuguese</option>
+            <option value="es" aria-label='Spanish'>Spanish</option>
+            <option value="ru" aria-label='Russian'>Russian</option>
+            <option value="tr" aria-label='Turkish'>Turkish</option>
+            <option value="fr" aria-label='French'>French</option>
         </select>
-        <button className='translate'>Translate</button>
+        <button className='translate' role='button' aria-label='Translate'>Translate</button>
         {/* Start working on transmiting the trans and error handling */}
 
     </form>

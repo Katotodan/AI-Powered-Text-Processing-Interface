@@ -97,8 +97,8 @@ const OutputText = ({text}) => {
     <div>
       {text ? (
         <div className='text-container'>
-            {!isSummarizerWorking && <p className='error-msg'>
-                Summarizer not workink <span onClick={()=>{setIsSummarizerWorking(true)}}>X</span>
+            {!isSummarizerWorking && <p className='error-msg' aria-label="Summarizer is not working">
+                Summarizer is not working <span onClick={()=>{setIsSummarizerWorking(true)}} role='Hide message'>X</span>
             </p> }
             <div className="arrow-container">
                 {hideSummarizeBtn && (<>
@@ -106,22 +106,29 @@ const OutputText = ({text}) => {
                         title="Previous text" 
                         onClick={showPreviousText}
                         ref={previousBtnRef}
+                        role='button'
+                        aria-label='Show previous text'
                     ><ArrowBackIosNewIcon /></button>
                     <button 
                         title="Summarized text"
                         onClick={showSummarizedText}
                         ref={summarizeBtnRef}
+                        role='button'
+                        aria-label='Show summarized text'
                     ><ArrowForwardIosIcon /></button>
                 </>)}
                 
             </div>
-            <div className='inputText-container'>
+            <div className='inputText-container' aria-label='Input text'>
                 {allTextArray[textArrayIndex]}
             </div>
             <div className='language-container'>
                 <DetectedLanguage text={text} language ={newLanguage}/>
                 {!hideSummarizeBtn && (<>
-                    {text.length > 150 && (<>{detectedLanguageCode === "en" && <button className='Summarizer' onClick={summarize}>Summarizer</button>}</>)}
+                    {text.length > 150 && (<>{
+                        detectedLanguageCode === "en" && <button role='button'
+                        aria-label='Summarize button'
+                        className='Summarizer' onClick={summarize}>Summarizer</button>}</>)}
                 </>)}
             </div>
             {/* Translate code */}
@@ -132,7 +139,7 @@ const OutputText = ({text}) => {
         </div>
         ) : (
             <div>
-                <p className='initial-p'>
+                <p className='initial-p' aria-label="Enter some text to start text processing!">
                     Enter some text to start text processing!!!
                 </p>
                 <p className='initial-p'>📝📢📝</p>

@@ -56,8 +56,9 @@ export const InputText = ({updateText}) => {
             ref={textareaRef}
             value={textareaValue}
             onChange={adjustHeight}
+            aria-label='Enter text to process here'
           />
-        <button onClick={handleSubmit}>
+        <button onClick={handleSubmit} role='button' aria-label='Send text'>
             <SendIcon></SendIcon>
         </button>
         

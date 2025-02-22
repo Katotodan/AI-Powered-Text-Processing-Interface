@@ -89,7 +89,7 @@ export const DetectedLanguage = ({text, language}) => {
     }, [text])
       
   return (
-      <p>Detected language: <strong>
+      <p aria-label='Detected language'>Detected language: <strong aria-label={languageDetected}>
         {languageDetected ? languageDetected : "None"}</strong></p>
   )
 }

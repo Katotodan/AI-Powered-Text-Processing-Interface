@@ -42,10 +42,10 @@ function App() {
   
   return (
     <div className="App">
-      <h2>Welcome to Text Processing App</h2>
+      <h2 aria-label="Welcome to Text Processing App">Welcome to Text Processing App</h2>
       <OutputText text={inputText}></OutputText>
       <TranslatedText newText={inputText}/>
-      {languageNotFound && <p>Input language not detected</p>}
+      {languageNotFound && <p aria-label="Input language not detected">Input language not detected</p>}
       <InputText updateText={updateText}></InputText>
       
     </div>
